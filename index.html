@@ -13,92 +13,74 @@ body {
     overflow-x: hidden;
 }
 
-/* Centered Manhwa Container */
+/* Container */
 .episode {
     max-width: 800px;
     margin: auto;
+    padding: 10px;
 }
 
 /* Panels */
 .panel {
     width: 100%;
+    height: auto;
     display: block;
+    margin-bottom: 20px;
     opacity: 0;
-    transform: translateY(50px);
-    transition: all 1s ease;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    will-change: opacity, transform;
 }
 
-/* Fade-in Active */
+/* Visible State */
 .panel.show {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* Spacing */
-.space {
-    height: 20px;
-}
-
-/* Subtle Parallax */
-.parallax {
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
-    height: 400px;
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .episode {
+        padding: 5px;
+    }
+    .panel {
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Background Music -->
-<audio autoplay loop>
-    <source src="assets/music.mp3" type="audio/mp3">
-</audio>
-
 <div class="episode">
 
-    <img src="assets/image 1.png" class="panel">
-    <div class="space"></div>
-
-    <img src="assets/image 2.png" class="panel">
-    <div class="space"></div>
-
-    <!-- Parallax Effect Panel -->
-    <img src="assets/image 3 .png" class="panel">
-    <div class="space"></div>
-
-    <img src="assets/image 4 .png" class="panel">
-    <div class="space"></div>
-
-    <img src="assets/image 5 .png" class="panel">
-    <div class="space"></div>
-
-    <img src="assets/image 6.png" class="panel">
-    <div class="space"></div>
-
-    <img src="assets/image 7.png" class="panel">
+    <img src="assets/image 1.png" class="panel" loading="lazy">
+    <img src="assets/image 2.png" class="panel" loading="lazy">
+    <img src="assets/image 3 .png" class="panel" loading="lazy">
+    <img src="assets/image 4 .png" class="panel" loading="lazy">
+    <img src="assets/image 5 .png" class="panel" loading="lazy">
+    <img src="assets/image 6.png" class="panel" loading="lazy">
+    <img src="assets/image 7.png" class="panel" loading="lazy">
 
 </div>
 
 <script>
-/* Scroll Fade-In Effect */
 const panels = document.querySelectorAll('.panel');
 
-function revealOnScroll() {
-    const triggerBottom = window.innerHeight * 0.9;
-
-    panels.forEach(panel => {
-        const panelTop = panel.getBoundingClientRect().top;
-
-        if (panelTop < triggerBottom) {
-            panel.classList.add('show');
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
         }
     });
-}
+}, {
+    threshold: 0.1
+});
 
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', revealOnScroll);
+panels.forEach(panel => {
+    observer.observe(panel);
+});
 </script>
 
 </body>
